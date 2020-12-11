@@ -136,3 +136,7 @@ MEDIA_SPECIALITY_IMAGE_DIR = 'speciality_images'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
