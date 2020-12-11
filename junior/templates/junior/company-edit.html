@@ -1,0 +1,36 @@
+{% extends './base.html' %}
+{% block content %}
+  <style>
+      body {
+        background-color: #F6F2E6;
+      }
+  </style>
+  <main class="container mt-3 pb-5">
+    <div class="row mt-5">
+      {% include './my-area-nav.html' %}
+      <div class="col-12 col-lg-8">
+        <div class="card">
+          <div class="card-body px-4 pb-4">
+            <!-- Tab -->
+            <section class="tab-pane fade show active">
+              <h2 class="h4 pt-2 pb-3">Информация о&nbsp;компании</h2>
+              {% if messages %}
+                {% for message in messages %}
+                  <p class="alert alert-info" role="alert">
+                    {{ message }}
+                  </p>
+                {% endfor %}
+              {% endif %}
+              <!--form-->
+              {% load crispy_forms_tags %}
+              {% csrf_token %}
+              {% crispy form form.helper %}
+              <!--end form-->
+            </section>
+            <!-- END Tab -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+{% endblock %}

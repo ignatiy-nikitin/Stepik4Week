@@ -1,0 +1,184 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout, Row, Column, ButtonHolder
+from django import forms
+from django.contrib.auth.models import User
+
+from junior.models import Company, Application, Vacancy, Resume
+
+
+class RegisterForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput(), label='Пароль')
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name']
+        labels = {
+            'username': 'Логин',
+            'first_name': 'Имя',
+            'last_name': 'Фамилия',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.label_class = 'text-muted'
+        self.helper.add_input(Submit('submit', 'Зарегистрироваться', css_class='btn btn-primary btn-lg btn-block'))
+        self.fields['username'].help_text = None
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+
+
+class LogInForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput(), label='Пароль')
+
+    class Meta:
+        model = User
+        fields = ['username']
+        labels = {
+            'username': 'Логин',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.label_class = 'text-muted'
+        self.helper.add_input(Submit('submit', 'Войти', css_class='btn btn-primary btn-lg btn-block'))
+        self.fields['username'].help_text = None
+
+
+class EditCompanyForm(forms.ModelForm):
+    class Meta:
+        model = Company
+        fields = ['name', 'location', 'logo', 'description', 'employee_count']
+        labels = {
+            'name': 'Название компании',
+            'location': 'География',
+            'logo': 'Логотип',
+            'description': 'Информация о компании',
+            'employee_count': 'Количество человек в компании',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.label_class = 'mb-2 text-dark'
+        self.helper.add_input(Submit('submit', 'Сохранить', css_class='btn btn-info'))
+        self.helper.layout = Layout(
+            Row(
+                Column('name'), Column('logo'),
+            ),
+            Row(
+                Column('employee_count'), Column('location'),
+            ),
+            Row(
+                Column('description'),
+            ),
+        )
+
+
+class ApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ['written_username', 'written_phone', 'written_cover_letter']
+        labels = {
+            'written_username': 'Вас зовут',
+            'written_phone': 'Ваш телефон',
+            'written_cover_letter': 'Сопроводительное письмо',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+
+        self.helper.form_method = 'post'
+        self.helper.label_class = 'mb-1'
+        self.helper.add_input(Submit('submit', 'Записаться на пробный урок', css_class='btn btn-primary mt-4 mb-2'))
+        self.helper.layout = Layout(
+            Row(
+                Column('written_username'),
+            ),
+            Row(
+                Column('written_phone'),
+            ),
+            Row(
+                Column('written_cover_letter'),
+            ),
+        )
+
+
+class EditVacancyForm(forms.ModelForm):
+    class Meta:
+        model = Vacancy
+        fields = ['title', 'specialty', 'skills', 'description', 'salary_min', 'salary_max']
+        labels = {
+            'title': 'Название вакансии',
+            'specialty': 'Специализация',
+            'salary_min': 'Зарпалата от',
+            'salary_max': 'Зарплата до',
+            'skills': 'Требуемые навыки',
+            'description': 'Описание вакансии',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.label_class = 'mb-2 text-dark'
+        self.helper.add_input(Submit('submit', 'Сохранить', css_class='btn btn-info'))
+        self.helper.layout = Layout(
+            Row(Column('title'), Column('specialty')),
+            Row(Column('salary_min'), Column('salary_max')),
+            Row(Column('skills')),
+            Row(Column('description')),
+        )
+
+
+class EditResumeForm(forms.ModelForm):
+    class Meta:
+        model = Resume
+        fields = ['name', 'surname', 'status', 'salary', 'specialty', 'grade', 'education', 'experience', 'portfolio']
+        labels = {
+            'name': 'Имя',
+            'surname': 'Фамилия',
+            'status': 'Готовность к работе',
+            'salary': 'Ожидаемое вознаграждение',
+            'specialty': 'Специализация',
+            'grade': 'Квалификация',
+            'education': 'Образование',
+            'experience': 'Опыт работы',
+            'portfolio': 'Ссылка на портфолио',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.label_class = 'mb-2 text-dark'
+        self.helper.add_input(Submit('submit', 'Сохранить', css_class='btn btn-info'))
+        self.helper.layout = Layout(
+            Row(Column('name'), Column('surname')),
+            Row(Column('status'), Column('salary')),
+            Row(Column('specialty'), Column('grade')),
+            Row(Column('education')),
+            Row(Column('experience')),
+            Row(Column('portfolio')),
+        )
+
+
+class SearchVacanciesForm(forms.Form):
+    query = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'Поиск...'}), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'get'
+        self.helper.label_class = 'mb-2 text-dark'
+        self.helper.form_action = '/search/'
+        self.helper.layout = Layout(
+            Row(Column('query'), Column(ButtonHolder(
+                Submit('', 'Найти вакансии', css_class='btn btn-primary  my-0')
+            )))
+        )
