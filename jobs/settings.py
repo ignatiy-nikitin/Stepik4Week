@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '8ir6atgq87!0s-oj4ly!^w250yo*rxofq1y^c@eznl*(d&y(i-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -137,6 +137,4 @@ MEDIA_SPECIALITY_IMAGE_DIR = 'speciality_images'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+
