@@ -1,1 +1,1 @@
-web: gunicorn junior.wsgi
+web: gunicorn jobs.wsgi
